@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAU Hangar Presentation</title>
@@ -24,39 +23,6 @@
             background-color: #F0F4F8; /* Light blue-gray background */
             color: #1F2937; /* Dark gray text */
             overflow-x: hidden;
-        }
-
-        .gradient-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at 20% 20%, rgba(14, 116, 144, 0.18), transparent 45%),
-                        radial-gradient(circle at 80% 30%, rgba(29, 78, 216, 0.16), transparent 50%),
-                        radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.12), transparent 55%);
-            filter: saturate(120%);
-        }
-
-        .floating-orb {
-            position: fixed;
-            width: 220px;
-            height: 220px;
-            border-radius: 9999px;
-            background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0));
-            mix-blend-mode: screen;
-            animation: float 16s ease-in-out infinite;
-            filter: blur(4px);
-            opacity: 0.75;
-            pointer-events: none;
-        }
-
-        .floating-orb.orb-1 { top: 12%; left: 8%; animation-delay: 0s; }
-        .floating-orb.orb-2 { top: 65%; left: 18%; animation-delay: 4s; }
-        .floating-orb.orb-3 { top: 25%; right: 15%; animation-delay: 8s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-            50% { transform: translate3d(30px, -40px, 0) scale(1.1); }
         }
 
         /* 3D canvas for the hero section */
@@ -96,66 +62,6 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            gap: 2rem;
-        }
-
-        .hero-chip-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            justify-content: center;
-        }
-
-        .hero-chip {
-            padding: 0.5rem 1.25rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            color: #0F172A;
-            letter-spacing: 0.03em;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .hero-chip:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
-        }
-
-        .cta-row {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.85rem 1.9rem;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .cta-primary {
-            background: linear-gradient(135deg, #2563EB, #1E40AF);
-            color: #F8FAFC;
-            box-shadow: 0 16px 35px rgba(37, 99, 235, 0.35);
-        }
-
-        .cta-secondary {
-            background: rgba(255, 255, 255, 0.75);
-            color: #0F172A;
-            border: 1px solid rgba(148, 163, 184, 0.45);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
         }
 
         /* Header */
@@ -181,7 +87,38 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 1rem;
             padding: 0.75rem 2rem;
-@@ -122,290 +215,491 @@
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Scroll-reveal animation setup */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition-delay: 0.1s;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-1 { transition-delay: 0.2s; }
+        .animate-on-scroll.delay-2 { transition-delay: 0.3s; }
+        .animate-on-scroll.delay-3 { transition-delay: 0.4s; }
+
+
+        /* New Data Card Styling */
+        .data-display {
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .data-display h3 {
+            font-size: 1rem;
+            font-weight: 600;
             color: #0369A1; /* Aviation Blue */
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -206,15 +143,6 @@
             font-size: 1rem;
             color: #6B7280;
             margin-top: 0.5rem;
-        }
-
-        .data-display .trend-positive {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #059669;
         }
         
         /* 3D Hover Effect for Image Placeholders */
@@ -266,19 +194,6 @@
             max-width: 600px;
         }
 
-        .section-lede {
-            max-width: 840px;
-            margin: -2rem auto 2rem;
-            text-align: center;
-            color: #334155;
-            font-size: 1.125rem;
-            line-height: 1.75;
-        }
-
-        .section-lede strong {
-            color: #1E40AF;
-        }
-
         /* Animated scroll-down chevron */
         .scroll-down {
             position: absolute;
@@ -301,87 +216,12 @@
             }
         }
 
-        .timeline-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            border: 1px solid rgba(99, 102, 241, 0.35);
-            background: rgba(255, 255, 255, 0.75);
-            color: #1E1B4B;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-
-        .timeline-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 30px rgba(79, 70, 229, 0.25);
-        }
-
-        .timeline-button.active {
-            background: linear-gradient(135deg, #6366F1, #4338CA);
-            color: #F8FAFC;
-            box-shadow: 0 18px 35px rgba(79, 70, 229, 0.35);
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #0EA5E9;
-            border: 3px solid #E0F2FE;
-            box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
-            transition: transform 0.2s ease;
-        }
-
-        input[type="range"]::-webkit-slider-thumb:active {
-            transform: scale(1.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #0EA5E9;
-            border: 3px solid #E0F2FE;
-            box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
-        }
-
-        @media (max-width: 768px) {
-            .hero-content {
-                padding: 0 1.25rem;
-            }
-
-            h2.section-title {
-                font-size: 2.5rem;
-            }
-
-            .floating-orb {
-                display: none;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .animate-on-scroll,
-            .floating-orb,
-            .hero-chip,
-            .cta-button,
-            .timeline-button {
-                transition: none !important;
-                animation: none !important;
-            }
-        }
-
     </style>
 </head>
 <body class="antialiased">
 
     <!-- 3D Background Canvas -->
     <canvas id="three-canvas"></canvas>
-    <div class="gradient-overlay"></div>
-    <div class="floating-orb orb-1"></div>
-    <div class="floating-orb orb-2"></div>
-    <div class="floating-orb orb-3"></div>
     
     <!-- Header -->
     <header id="main-header" class="fixed top-0 left-0 w-full p-6 z-50">
@@ -399,32 +239,12 @@
     <!-- Hero Section -->
     <section id="hero" class="hero-content">
         <div class="space-y-6">
-        <div class="hero-chip-row animate-on-scroll">
-            <div class="hero-chip">Carbon-Smart Design</div>
-            <div class="hero-chip">Predictive Operations</div>
-            <div class="hero-chip">Investor-Ready Analytics</div>
-        </div>
-        <div class="space-y-6 animate-on-scroll">
             <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter text-gray-900">
                 HANGAR PRESENTATION
             </h1>
             <p class="text-xl md:text-2xl font-medium text-gray-700">
                 The Future of Aviation Infrastructure by SAU
             </p>
-            <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-600">
-                A seamless fusion of data, automation, and design crafted to deliver exceptional asset performance and investor confidence from day one.
-            </p>
-            <div class="cta-row">
-                <a href="#investment" class="cta-button cta-primary">
-                    Explore Investment Story
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                </a>
-                <a href="#operations" class="cta-button cta-secondary">
-                    View Operational Blueprint
-                </a>
-            </div>
         </div>
         <!-- Scroll Down Indicator -->
         <div class="scroll-down">
@@ -440,11 +260,6 @@
             <section id="overview" class="animate-on-scroll">
                 <h2 class="section-title">Hangar & Office Overview</h2>
                 
-                <p class="section-lede">
-                    Purpose-built to support <strong>next-generation aircraft ecosystems</strong>, the SAU Hangar delivers a balanced mix of technical capability,
-                    human-centered spaces, and revenue-accelerating operations.
-                </p>
-
                 <!-- Image Placeholder for Hangar Interior -->
                 <div class="mb-12 img-placeholder-wrapper">
                     <img src="https://i.postimg.cc/yNNY3bQZ/hangar-05.jpg" 
@@ -477,12 +292,6 @@
                             <span class="unit">USD</span>
                         </p>
                         <p class="price-sub">+ Tax + Airport Fees</p>
-                        <p class="trend-positive">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                            </svg>
-                            14% IRR vs. regional benchmarks
-                        </p>
                     </div>
                 </div>
             </section>
@@ -490,9 +299,6 @@
             <!-- Section 2: Facility Layout -->
             <section id="layout" class="animate-on-scroll">
                 <h2 class="section-title">Advanced Facility Layout</h2>
-                <p class="section-lede">
-                    Modular infrastructure allows rapid reconfiguration of operations, catering to executive aviation, MRO, and future eVTOL deployment without compromising uptime.
-                </p>
                 <div class="grid md:grid-cols-2 gap-12 items-start">
                     
                     <!-- Ground Floor -->
@@ -535,9 +341,6 @@
             <!-- Section 3: Operational Space -->
             <section id="operations" class="animate-on-scroll">
                 <h2 class="section-title">Operational Space & Capability</h2>
-                <p class="section-lede">
-                    Intelligent operational modeling aligns asset utilization, maintenance readiness, and crew efficiency with investor-grade transparency.
-                </p>
                 <div class="grid md:grid-cols-2 gap-12 items-start">
                     
                     <!-- Platform Area -->
@@ -577,81 +380,10 @@
                         <p class="section-description text-center mx-auto font-semibold text-lg">
                             Suitable for MRO (Maintenance, Repair, and Overhaul) operations.
                         </S>
-                        </p>
                     </div>
                 </div>
             </section>
             
-
-            <!-- Section: Investor Experience -->
-            <section id="investment" class="animate-on-scroll">
-                <h2 class="section-title">Investor Performance Simulator</h2>
-                <p class="section-lede">
-                    Explore how capital deployment across milestones impacts cash flow, operations, and long-term equity value.
-                    Slide through the phases to watch live projections update instantly.
-                </p>
-                <div class="glass-panel p-10 space-y-8">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                        <div>
-                            <p class="text-sm uppercase tracking-widest text-sky-700 font-semibold">Capital Phase</p>
-                            <h3 class="text-3xl font-bold text-slate-900" id="phase-title">Phase 3 · Operations Ramp</h3>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-semibold text-slate-600">Concept</span>
-                            <input id="phase-slider" type="range" min="0" max="4" value="2" class="w-48 accent-sky-600">
-                            <span class="text-sm font-semibold text-slate-600">Expansion</span>
-                        </div>
-                    </div>
-                    <div class="grid md:grid-cols-3 gap-6" id="phase-metrics">
-                        <!-- Metrics injected via JS -->
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="glass-panel bg-white/80 border border-sky-100 p-6 shadow-sm">
-                            <h4 class="text-lg font-semibold text-slate-900 mb-2">Capital Efficiency Narrative</h4>
-                            <p class="text-slate-600 leading-relaxed" id="phase-narrative">Digitized maintenance planning and predictive analytics unlock double-digit EBITDA margins within 18 months of go-live.</p>
-                        </div>
-                        <div class="glass-panel bg-white/80 border border-sky-100 p-6 shadow-sm">
-                            <h4 class="text-lg font-semibold text-slate-900 mb-2">Key Technical Enablers</h4>
-                            <ul class="space-y-2 text-slate-600 text-sm" id="phase-enablers">
-                                <li>AI-driven hangar scheduling integrates with flight ops.</li>
-                                <li>Modular energy microgrid offsets 40% of annual load.</li>
-                                <li>Digital twin feeds investor dashboards in real time.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section: Strategic Timeline -->
-            <section class="animate-on-scroll" id="timeline">
-                <h2 class="section-title">Strategic Delivery Timeline</h2>
-                <p class="section-lede">
-                    Every phase is benchmarked against aerospace-grade quality metrics, with investor visibility across design, commissioning, and commercialization.
-                </p>
-                <div class="grid lg:grid-cols-[1.2fr_1fr] gap-10">
-                    <div class="glass-panel p-8 space-y-6">
-                        <div class="flex flex-wrap gap-3" id="timeline-buttons">
-                            <button class="timeline-button active" data-phase="design">Concept Design</button>
-                            <button class="timeline-button" data-phase="construction">Construction</button>
-                            <button class="timeline-button" data-phase="systems">Systems Integration</button>
-                            <button class="timeline-button" data-phase="operations">Operational Launch</button>
-                        </div>
-                        <div class="timeline-content space-y-4" id="timeline-content">
-                            <!-- Content injected via JS -->
-                        </div>
-                    </div>
-                    <div class="glass-panel p-8 space-y-6 bg-white/80 border border-slate-200">
-                        <h4 class="text-lg font-semibold text-slate-900">Investor Assurance Metrics</h4>
-                        <ul class="space-y-3 text-slate-600 text-sm" id="timeline-metrics">
-                            <!-- Metrics injected via JS -->
-                        </ul>
-                        <div class="img-placeholder-wrapper">
-                            <img id="timeline-image" src="https://i.postimg.cc/yNNY3bQZ/hangar-05.jpg" alt="Timeline Visual" class="img-placeholder">
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Section 4: Additional View -->
             <section class="animate-on-scroll">
                 <h2 class="section-title">Scale & Functionality</h2>
@@ -677,7 +409,217 @@
                 </p>
             </div>
         </footer>
-@@ -623,30 +917,233 @@
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 3D Hero Scene (Three.js) ---
+            let scene, camera, renderer, hangar, jet;
+            let mouseX = 0, mouseY = 0;
+            // FIX: Changed const to let to allow reassignment on window resize
+            let windowHalfX = window.innerWidth / 2;
+            let windowHalfY = window.innerHeight / 2;
+
+            function initThree() {
+                try {
+                    const canvas = document.getElementById('three-canvas');
+                    if (!canvas) return;
+
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    camera.position.set(0, 15, 35); // Elevated view
+                    camera.lookAt(0, 5, 0);
+
+                    renderer = new THREE.WebGLRenderer({ 
+                        canvas: canvas,
+                        alpha: true, 
+                        antialias: true 
+                    });
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(window.devicePixelRatio);
+
+                    // Lighting
+                    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+                    scene.add(ambientLight);
+                    const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+                    directionalLight.position.set(10, 20, 10);
+                    scene.add(directionalLight);
+
+                    // Materials
+                    const wireMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x0369A1, // Aviation blue
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    
+                    const jetMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xD1D5DB, // Light gray
+                        metalness: 0.5,
+                        roughness: 0.6
+                    });
+
+                    // Create Hangar (as a wireframe box)
+                    const hangarGeom = new THREE.BoxGeometry(60, 25, 40);
+                    hangar = new THREE.Mesh(hangarGeom, wireMaterial);
+                    hangar.position.y = 12.5; // Sit on the ground
+                    scene.add(hangar);
+                    
+                    // Create Ground
+                    const groundGeom = new THREE.PlaneGeometry(100, 100);
+                    const groundMat = new THREE.MeshBasicMaterial({
+                         color: 0x0369A1, 
+                         wireframe: true,
+                         transparent: true,
+                         opacity: 0.3
+                    });
+                    const ground = new THREE.Mesh(groundGeom, groundMat);
+                    ground.rotation.x = -Math.PI / 2;
+                    scene.add(ground);
+
+                    // Create Jet (low-poly placeholder)
+                    jet = new THREE.Group();
+                    const bodyGeom = new THREE.CylinderGeometry(1, 2, 18, 16);
+                    const body = new THREE.Mesh(bodyGeom, jetMaterial);
+                    body.rotation.z = Math.PI / 2;
+                    
+                    const cockpitGeom = new THREE.SphereGeometry(1.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+                    const cockpit = new THREE.Mesh(cockpitGeom, jetMaterial);
+                    cockpit.position.x = 9;
+                    cockpit.rotation.z = -Math.PI / 2;
+
+                    const wingGeom = new THREE.BoxGeometry(15, 0.5, 3);
+                    const wing = new THREE.Mesh(wingGeom, jetMaterial);
+                    wing.position.x = -2;
+
+                    const tailGeom = new THREE.BoxGeometry(4, 3, 0.5);
+                    const tail = new THREE.Mesh(tailGeom, jetMaterial);
+                    tail.position.set(-8.5, 2, 0);
+                    tail.rotation.z = -0.2;
+
+                    jet.add(body);
+                    jet.add(cockpit);
+                    jet.add(wing);
+                    jet.add(tail);
+                    jet.position.y = 5; // Raise jet off the ground
+                    jet.scale.set(0.8, 0.8, 0.8);
+                    scene.add(jet);
+
+                    document.addEventListener('mousemove', onDocumentMouseMove);
+                    window.addEventListener('resize', onWindowResize);
+                    
+                    animate();
+
+                } catch (e) {
+                    console.error("Error initializing 3D scene:", e);
+                    const canvas = document.getElementById('three-canvas');
+                    if (canvas) canvas.style.display = 'none';
+                }
+            }
+            
+            function onDocumentMouseMove(event) {
+                mouseX = (event.clientX - windowHalfX) / 100;
+                mouseY = (event.clientY - windowHalfY) / 100;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Mouse parallax effect
+                camera.position.x += (mouseX - camera.position.x) * 0.01;
+                camera.position.y += (-mouseY - camera.position.y + 15) * 0.01;
+                camera.lookAt(scene.position);
+                
+                // Slow rotation
+                if (hangar) hangar.rotation.y += 0.0005;
+                if (jet) jet.rotation.y += 0.001;
+
+                if (renderer && scene && camera) {
+                    renderer.render(scene, camera);
+                }
+            }
+
+            function onWindowResize() {
+                if (camera && renderer) {
+                    // These variables are now correctly declared with 'let'
+                    // so they can be reassigned here.
+                    windowHalfX = window.innerWidth / 2;
+                    windowHalfY = window.innerHeight / 2;
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            }
+
+            initThree();
+
+
+            // --- Scroll Animations (Intersection Observer) ---
+            const scrollElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const scrollObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        
+                        // Trigger count-up animation
+                        const countUpElements = entry.target.querySelectorAll('.count-up');
+                        countUpElements.forEach(el => {
+                            if (!el.classList.contains('animated')) {
+                                animateCountUp(el);
+                                el.classList.add('animated');
+                            }
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 // 10% visible
+            });
+
+            scrollElements.forEach(el => {
+                scrollObserver.observe(el);
+            });
+
+
+            // --- Count-Up Animation Function ---
+            function animateCountUp(el) {
+                const target = parseFloat(el.getAttribute('data-target'));
+                if (isNaN(target)) return;
+                
+                const duration = 2000; // Animation duration in ms
+                const isDecimal = target % 1 !== 0 || el.innerText.includes('.');
+                const decimalPlaces = isDecimal ? (el.innerText.split('.')[1] || '').length : 0;
+                
+                let startTime = null;
+
+                function step(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    
+                    // Ease-out quad function
+                    const easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                    let currentValue = easeOutProgress * target;
+                    
+                    if (isDecimal) {
+                        el.innerText = currentValue.toFixed(decimalPlaces);
+                    } else {
+                        el.innerText = Math.floor(currentValue).toLocaleString('en-US');
+                    }
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        if (isDecimal) {
+                            el.innerText = target.toFixed(decimalPlaces);
+                        } else {
+                            el.innerText = target.toLocaleString('en-US');
+                        }
+                    }
                 }
                 
                 requestAnimationFrame(step);
@@ -703,213 +645,8 @@
                 }
             });
 
-            // --- Investor Performance Simulator ---
-            const phaseSlider = document.getElementById('phase-slider');
-            const phaseTitle = document.getElementById('phase-title');
-            const phaseMetrics = document.getElementById('phase-metrics');
-            const phaseNarrative = document.getElementById('phase-narrative');
-            const phaseEnablers = document.getElementById('phase-enablers');
-
-            if (phaseSlider && phaseTitle && phaseMetrics && phaseNarrative && phaseEnablers) {
-                const investorPhases = [
-                    {
-                        title: 'Phase 1 · Vision Blueprint',
-                        narrative: 'Architectural programming aligned with stakeholder KPIs ensures compliance with FAA standards and sets the baseline for ESG reporting.',
-                        enablers: [
-                            'Digital twin prototypes validate traffic throughput.',
-                            'Passive design reduces HVAC loads by 18%.',
-                            'Capital stack modeled for blended financing options.'
-                        ],
-                        metrics: [
-                            { label: 'Initial Capital Outlay', value: '$42M', sub: 'Secured term sheet, 8% cost of capital' },
-                            { label: 'Projected Lease Coverage', value: '1.4×', sub: 'Anchor tenants committed' },
-                            { label: 'Time to Permitting', value: '6 mo', sub: 'Fast-tracked via municipal partnership' }
-                        ]
-                    },
-                    {
-                        title: 'Phase 2 · Structural Delivery',
-                        narrative: 'High-performance envelope and modular bays accelerate commissioning while maintaining mission-critical tolerances.',
-                        enablers: [
-                            'Prefabricated trusses cut schedule risk by 22%.',
-                            'Onsite robotics monitor QA/QC daily.',
-                            'Smart materials lower lifetime OPEX by $1.6M.'
-                        ],
-                        metrics: [
-                            { label: 'Budget Adherence', value: '96%', sub: 'Contingency preserved' },
-                            { label: 'Schedule Certainty', value: '+45 days', sub: 'Ahead of regional benchmarks' },
-                            { label: 'Embodied Carbon', value: '-28%', sub: 'vs. standard hangars' }
-                        ]
-                    },
-                    {
-                        title: 'Phase 3 · Operations Ramp',
-                        narrative: 'Digitized maintenance planning and predictive analytics unlock double-digit EBITDA margins within 18 months of go-live.',
-                        enablers: [
-                            'AI-driven hangar scheduling integrates with flight ops.',
-                            'Modular energy microgrid offsets 40% of annual load.',
-                            'Digital twin feeds investor dashboards in real time.'
-                        ],
-                        metrics: [
-                            { label: 'Stabilized EBITDA', value: '$11.4M', sub: '+320 bps vs. plan' },
-                            { label: 'Hangar Utilization', value: '87%', sub: 'Predictive maintenance scheduling' },
-                            { label: 'Energy Autonomy', value: '58%', sub: 'Solar + hydrogen hybrid storage' }
-                        ]
-                    },
-                    {
-                        title: 'Phase 4 · Diversification',
-                        narrative: 'Rooftop vertiport and advanced avionics labs unlock new revenue channels aligned with eVTOL and defense partnerships.',
-                        enablers: [
-                            'Vertiport ready for UAM certification.',
-                            'Cyber-secured data spine for OEM collaboration.',
-                            'Advanced MRO lab prepped for defense contracts.'
-                        ],
-                        metrics: [
-                            { label: 'Adj. EBITDA Growth', value: '+24%', sub: 'New revenue streams activated' },
-                            { label: 'Tenant Retention', value: '98%', sub: 'Long-term blended leases' },
-                            { label: 'Capex Payback', value: '4.3 yrs', sub: 'Enhanced by tax incentives' }
-                        ]
-                    },
-                    {
-                        title: 'Phase 5 · Expansion Portfolio',
-                        narrative: 'Replicable blueprint packages data, automation, and partnerships into a franchise-ready global platform.',
-                        enablers: [
-                            'Modular pods adapt to new geographies in 8 months.',
-                            'Cross-site command center coordinates fleets.',
-                            'Investor dashboards benchmark IRR across assets.'
-                        ],
-                        metrics: [
-                            { label: 'Portfolio IRR', value: '18.7%', sub: 'Across 3 strategic markets' },
-                            { label: 'Scalable Capex', value: '-12%', sub: 'Through strategic procurement' },
-                            { label: 'Enterprise Value', value: '$1.12B', sub: 'Modeled at Year 7' }
-                        ]
-                    }
-                ];
-
-                const renderInvestorPhase = (index) => {
-                    const phase = investorPhases[index];
-                    if (!phase) return;
-
-                    phaseTitle.textContent = phase.title;
-                    phaseNarrative.textContent = phase.narrative;
-                    phaseEnablers.innerHTML = phase.enablers.map(item => `<li>${item}</li>`).join('');
-                    phaseMetrics.innerHTML = phase.metrics.map(metric => `
-                        <div class="glass-panel bg-white/80 border border-slate-200 p-6 shadow-sm">
-                            <p class="text-xs uppercase tracking-[0.3em] text-sky-600 font-semibold mb-3">${metric.label}</p>
-                            <p class="text-3xl font-bold text-slate-900">${metric.value}</p>
-                            <p class="text-sm text-slate-500 mt-2">${metric.sub}</p>
-                        </div>
-                    `).join('');
-                };
-
-                phaseSlider.addEventListener('input', (event) => {
-                    renderInvestorPhase(parseInt(event.target.value, 10));
-                });
-
-                renderInvestorPhase(parseInt(phaseSlider.value, 10));
-            }
-
-            // --- Timeline Interaction ---
-            const timelineButtons = document.querySelectorAll('.timeline-button');
-            const timelineContent = document.getElementById('timeline-content');
-            const timelineMetrics = document.getElementById('timeline-metrics');
-            const timelineImage = document.getElementById('timeline-image');
-
-            if (timelineButtons.length && timelineContent && timelineMetrics && timelineImage) {
-                const timelineData = {
-                    design: {
-                        heading: 'Immersive Design Intelligence',
-                        body: 'VR-enabled charrettes accelerate consensus, while material passports lock in sustainability goals and align with future regulatory frameworks.',
-                        bullets: [
-                            'Stakeholder digital twin workshops completed in 3 weeks.',
-                            'Wind tunnel simulations optimized façade geometry.',
-                            'Net-zero roadmap validated with independent auditors.'
-                        ],
-                        metrics: [
-                            'Design sign-off: 97% satisfaction score',
-                            'BIM clash detections resolved: 1,240',
-                            'ESG compliance alignment: GRESB 5-star trajectory'
-                        ],
-                        image: 'https://i.postimg.cc/0NN2KBWd/hangar-03.jpg'
-                    },
-                    construction: {
-                        heading: 'Precision Construction Velocity',
-                        body: 'Robotics-assisted fabrication and drone QA create a living record of quality, compressing critical path activities.',
-                        bullets: [
-                            'Digital QA/QC reduces rework by 32%.',
-                            'Edge sensors stream data to investor dashboards.',
-                            'Safety automation drives 1.2M hours without incident.'
-                        ],
-                        metrics: [
-                            'Schedule performance: +11%',
-                            'Capital at risk mitigated: $6.4M',
-                            'Workforce productivity uplift: 19%'
-                        ],
-                        image: 'https://i.postimg.cc/W4fpGwCZ/Shot-lejano-avion-2.jpg'
-                    },
-                    systems: {
-                        heading: 'Systems Integration & Testing',
-                        body: 'Avionics, energy, and data infrastructure converge through a command platform built for predictive insights and zero downtime.',
-                        bullets: [
-                            'Digital command center connects 140 subsystems.',
-                            'Cybersecurity hardened to aerospace standards.',
-                            'Operational readiness achieved 30 days pre-launch.'
-                        ],
-                        metrics: [
-                            'System uptime during commissioning: 99.6%',
-                            'Integration issues resolved: <48 hrs average',
-                            'Carbon intensity vs. baseline: -34%'
-                        ],
-                        image: 'https://i.postimg.cc/QMnNQJwk/Avion-estacionado-4.jpg'
-                    },
-                    operations: {
-                        heading: 'Live Operations Command',
-                        body: 'Real-time asset orchestration combines predictive maintenance, tenant analytics, and autonomous ground support fleets.',
-                        bullets: [
-                            'AI logistics reduce aircraft turnaround by 26%.',
-                            'Tenant analytics dashboards refresh every 15 minutes.',
-                            'Sustainability sensors feed investor ESG reports.'
-                        ],
-                        metrics: [
-                            'Revenue diversification index: 0.71',
-                            'Average tenant NPS: 74',
-                            'Scope 1+2 emissions: -42% vs. peers'
-                        ],
-                        image: 'https://i.postimg.cc/1zYRGr27/Avion-estacionado-2.jpg'
-                    }
-                };
-
-                const renderTimeline = (phaseKey) => {
-                    const phase = timelineData[phaseKey];
-                    if (!phase) return;
-
-                    timelineContent.innerHTML = `
-                        <div>
-                            <p class="text-sm uppercase tracking-[0.3em] text-indigo-600 font-semibold">${phase.heading}</p>
-                            <p class="mt-4 text-slate-600 leading-relaxed">${phase.body}</p>
-                        </div>
-                        <ul class="space-y-2 text-slate-600 text-sm">
-                            ${phase.bullets.map(bullet => `<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span><span>${bullet}</span></li>`).join('')}
-                        </ul>
-                    `;
-
-                    timelineMetrics.innerHTML = phase.metrics.map(metric => `<li class="flex items-center gap-3"><span class="h-2.5 w-2.5 rounded-full bg-sky-500"></span><span>${metric}</span></li>`).join('');
-                    timelineImage.src = phase.image;
-                };
-
-                timelineButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        timelineButtons.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                        renderTimeline(button.dataset.phase);
-                    });
-                });
-
-                renderTimeline('design');
-            }
-
         });
     </script>
 
-</body>
-</html>
 </body>
 </html>
