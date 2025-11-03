@@ -508,12 +508,11 @@
                     renderer.setSize(window.innerWidth, window.innerHeight);
                     renderer.setPixelRatio(window.devicePixelRatio);
 
-                    // Lighting
-                    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
-                    scene.add(ambientLight);
-                    const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
-                    directionalLight.position.set(10, 20, 10);
-                    scene.add(directionalLight);
+                  // Lighting
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+scene.add(directionalLight);
 
                     // Materials
                     const wireMaterial = new THREE.MeshBasicMaterial({ 
