@@ -484,13 +484,13 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- 3D Hero Scene (Three.js) ---
-            let scene, camera, renderer, hangar, jet;
+            let scene, camera, renderer, hangar, hangarInner;
             let mouseX = 0, mouseY = 0;
             // FIX: Changed const to let to allow reassignment on window resize
             let windowHalfX = window.innerWidth / 2;
             let windowHalfY = window.innerHeight / 2;
 
-            function initThree() {
+       function initThree() {
                 try {
                     const canvas = document.getElementById('three-canvas');
                     if (!canvas) return;
@@ -523,17 +523,20 @@
                         opacity: 0.8
                     });
                     
-                    const jetMaterial = new THREE.MeshStandardMaterial({
-                        color: 0xD1D5DB, // Light gray
-                        metalness: 0.5,
-                        roughness: 0.6
-                    });
-
                     // Create Hangar (as a wireframe box)
                     const hangarGeom = new THREE.BoxGeometry(60, 25, 40);
                     hangar = new THREE.Mesh(hangarGeom, wireMaterial);
                     hangar.position.y = 12.5; // Sit on the ground
                     scene.add(hangar);
+
+                    // --- NEW ---
+                    // Create Inner Hangar Truss
+                    const hangarInnerGeom = new THREE.BoxGeometry(55, 22, 35); // Slightly smaller
+                    hangarInner = new THREE.Mesh(hangarInnerGeom, wireMaterial);
+                    hangarInner.position.y = 12.5;
+                    hangarInner.rotation.set(0.1, 0.2, 0); // Give it a slight tilt
+                    scene.add(hangarInner);
+                    // --- END NEW ---
                     
                     // Create Ground
                     const groundGeom = new THREE.PlaneGeometry(100, 100);
@@ -547,33 +550,7 @@
                     ground.rotation.x = -Math.PI / 2;
                     scene.add(ground);
 
-                    // Create Jet (low-poly placeholder)
-                    jet = new THREE.Group();
-                    const bodyGeom = new THREE.CylinderGeometry(1, 2, 18, 16);
-                    const body = new THREE.Mesh(bodyGeom, jetMaterial);
-                    body.rotation.z = Math.PI / 2;
-                    
-                    const cockpitGeom = new THREE.SphereGeometry(1.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
-                    const cockpit = new THREE.Mesh(cockpitGeom, jetMaterial);
-                    cockpit.position.x = 9;
-                    cockpit.rotation.z = -Math.PI / 2;
-
-                    const wingGeom = new THREE.BoxGeometry(15, 0.5, 3);
-                    const wing = new THREE.Mesh(wingGeom, jetMaterial);
-                    wing.position.x = -2;
-
-                    const tailGeom = new THREE.BoxGeometry(4, 3, 0.5);
-                    const tail = new THREE.Mesh(tailGeom, jetMaterial);
-                    tail.position.set(-8.5, 2, 0);
-                    tail.rotation.z = -0.2;
-
-                    jet.add(body);
-                    jet.add(cockpit);
-                    jet.add(wing);
-                    jet.add(tail);
-                    jet.position.y = 5; // Raise jet off the ground
-                    jet.scale.set(0.8, 0.8, 0.8);
-                    scene.add(jet);
+                    // --- JET MODEL CODE REMOVED ---
 
                     document.addEventListener('mousemove', onDocumentMouseMove);
                     window.addEventListener('resize', onWindowResize);
@@ -585,14 +562,16 @@
                     const canvas = document.getElementById('three-canvas');
                     if (canvas) canvas.style.display = 'none';
                 }
-            }
+            }    
+            
+// Aqui antes estaba el initThree function original //
             
             function onDocumentMouseMove(event) {
                 mouseX = (event.clientX - windowHalfX) / 100;
                 mouseY = (event.clientY - windowHalfY) / 100;
             }
 
-            function animate() {
+           function animate() {
                 requestAnimationFrame(animate);
                 
                 // Mouse parallax effect
@@ -600,9 +579,12 @@
                 camera.position.y += (-mouseY - camera.position.y + 15) * 0.01;
                 camera.lookAt(scene.position);
                 
+                // --- MODIFIED ---
                 // Slow rotation
                 if (hangar) hangar.rotation.y += 0.0005;
-                if (jet) jet.rotation.y += 0.001;
+                // Rotate the inner shell in the opposite direction for a cool effect
+                if (hangarInner) hangarInner.rotation.y -= 0.0008; 
+                // --- END MODIFIED ---
 
                 if (renderer && scene && camera) {
                     renderer.render(scene, camera);
