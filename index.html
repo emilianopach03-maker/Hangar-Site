@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAU Hangar Presentation</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Load Three.js (for 3D elements) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* Custom styles for the light theme and animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8; /* Light blue-gray background */
+            color: #1F2937; /* Dark gray text */
+            overflow-x: hidden;
+        }
+
+        /* 3D canvas for the hero section */
+        #three-canvas {
+            position: fixed; /* Fixed position to stay in background */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        /* Glassmorphism UI Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.07);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .content-section {
+            position: relative;
+            z-index: 10; /* Ensure content is above the 3D canvas */
+        }
+
+        /* Hero content styling */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Header */
+        header {
+            z-index: 50;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            padding: 1.5rem 0;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        header.scrolled .glass-nav {
+             background: rgba(255, 255, 255, 0.8);
+             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px) saturate(100%);
+            -webkit-backdrop-filter: blur(10px) saturate(100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 0.75rem 2rem;
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Scroll-reveal animation setup */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition-delay: 0.1s;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-1 { transition-delay: 0.2s; }
+        .animate-on-scroll.delay-2 { transition-delay: 0.3s; }
+        .animate-on-scroll.delay-3 { transition-delay: 0.4s; }
+
+
+        /* New Data Card Styling */
+        .data-display {
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .data-display h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0369A1; /* Aviation Blue */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-display .value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1;
+        }
+
+        .data-display .unit {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-left: 0.5rem;
+        }
+        
+        .data-display .price-sub {
+            font-size: 1rem;
+            color: #6B7280;
+            margin-top: 0.5rem;
+        }
+        
+        /* 3D Hover Effect for Image Placeholders */
+        .img-placeholder-wrapper {
+             perspective: 1000px;
+        }
+        
+        .img-placeholder {
+            /* REMOVED: display: flex, align-items, justify-content, color, font-weight, letter-spacing */
+            /* These were for the placeholder text and are not needed for an <img> */
+            
+            background-color: #E5E7EB; /* This will show briefly while the image loads */
+            border-radius: 0.75rem;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            transform-style: preserve-3d;
+
+            /* ADDED: This is the key to preventing distorted images */
+            object-fit: cover; 
+        }
+        
+        .img-placeholder-wrapper:hover .img-placeholder {
+            transform: scale(1.05) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section header styling */
+        h2.section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: #1F2937;
+        }
+        
+        h3.section-subtitle {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        p.section-description {
+            font-size: 1.125rem;
+            color: #4B5563;
+            max-width: 600px;
+        }
+
+        /* Animated scroll-down chevron */
+        .scroll-down {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translate(-50%, 0);
+            }
+            40% {
+                transform: translate(-50%, -15px);
+            }
+            60% {
+                transform: translate(-50%, -5px);
+            }
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 3D Background Canvas -->
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full p-6 z-50">
+        <nav class="glass-nav flex justify-between items-center max-w-7xl mx-auto">
+            <div class="text-2xl font-bold tracking-tight text-gray-900">SAU</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#overview" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">Overview</a>
+                <a href="#layout" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">Layout</a>
+                <a href="#operations" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">Operations</a>
+                <a href="#contact" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-content">
+        <div class="space-y-6">
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter text-gray-900">
+                HANGAR PRESENTATION
+            </h1>
+            <p class="text-xl md:text-2xl font-medium text-gray-700">
+                The Future of Aviation Infrastructure by SAU
+            </p>
+        </div>
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-down">
+            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+    </section>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-section bg-white/70 backdrop-blur-sm pt-24">
+        <main class="py-24 px-6 max-w-7xl mx-auto space-y-32">
+
+            <!-- Section 1: Hangar & Office -->
+            <section id="overview" class="animate-on-scroll">
+                <h2 class="section-title">Hangar & Office Overview</h2>
+                
+                <!-- Image Placeholder for Hangar Interior -->
+                <div class="mb-12 img-placeholder-wrapper">
+                    <img src="https://i.postimg.cc/yNNY3bQZ/hangar-05.jpg" 
+                         alt="Hangar Interior with Multiple Jets" 
+                         class="img-placeholder shadow-lg">
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Data Card: Total Hangar Area -->
+                    <div class="glass-panel data-display animate-on-scroll delay-1">
+                        <h3>Total Hangar Area</h3>
+                        <p>
+                            <span class="value count-up" data-target="82334">0</span>
+                            <span class="unit">ft²</span>
+                        </p>
+                    </div>
+                    <!-- Data Card: Hangar Entrance Width -->
+                    <div class="glass-panel data-display animate-on-scroll delay-2">
+                        <h3>Hangar Entrance Width</h3>
+                        <p>
+                            <span class="value count-up" data-target="59.0551">0.00</span>
+                            <span class="unit">ft</span>
+                        </p>
+                    </div>
+                    <!-- Data Card: Price -->
+                    <div class="glass-panel data-display animate-on-scroll delay-3">
+                        <h3>Total Price per ft²</h3>
+                        <p>
+                            <span class="value">$<span class="count-up" data-target="112797.58">0.00</span></span>
+                            <span class="unit">USD</span>
+                        </p>
+                        <p class="price-sub">+ Tax + Airport Fees</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Facility Layout -->
+            <section id="layout" class="animate-on-scroll">
+                <h2 class="section-title">Advanced Facility Layout</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Ground Floor -->
+                    <div class="glass-panel p-8 space-y-6 animate-on-scroll delay-1">
+                        <h3 class="section-subtitle text-center">Ground Floor Offices</h3>
+                        <div class="img-placeholder-wrapper">
+                            <img src="https://i.postimg.cc/0NN2KBWd/hangar-03.jpg" 
+                                 alt="Ground Floor Blueprint" 
+                                 class="img-placeholder">
+                        </div>
+                        <div class="data-display text-center">
+                            <h3>Total Ground Floor Office Area</h3>
+                            <p>
+                                <span class="value count-up" data-target="15940">0</span>
+                                <span class="unit">ft²</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Upper Floor -->
+                    <div class="glass-panel p-8 space-y-6 animate-on-scroll delay-2">
+                        <h3 class="section-subtitle text-center">Upper Floor & Rooftop</h3>
+                        <div class="img-placeholder-wrapper">
+                             <img src="https://i.postimg.cc/QMnNQJwk/Avion-estacionado-4.jpg" 
+                                 alt="Upper Floor Interior View" 
+                                 class="img-placeholder">
+                        </div>
+                        <div class="data-display text-center">
+                            <h3>Total Upper Floor Office Area</h3>
+                            <p>
+                                <span class="value count-up" data-target="14332">0</span>
+                                <span class="unit">ft²</span>
+                            </p>
+                        </div>
+                        <p class="section-description text-center mx-auto">Includes detailed floor plans for upper-level offices and a complete rooftop schematic.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Operational Space -->
+            <section id="operations" class="animate-on-scroll">
+                <h2 class="section-title">Operational Space & Capability</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Platform Area -->
+                    <div class="glass-panel p-8 space-y-6 animate-on-scroll delay-1">
+                        <h3 class="section-subtitle text-center">Platform Area</h3>
+                        <div class="img-placeholder-wrapper">
+                            <img src="https://i.postimg.cc/W4fpGwCZ/Shot-lejano-avion-2.jpg" 
+                                 alt="Aircraft on Platform" 
+                                 class="img-placeholder">
+                        </div>
+                        <div class="data-display text-center">
+                            <h3>Total Platform Area</h3>
+                            <p>
+                                <span class="value count-up" data-target="63270">0</span>
+                                <span class="unit">ft²</span>
+                            </p>
+                        </div>
+                        <p class="section-description text-center mx-auto">Extensive external platform for aircraft parking and maneuvering.</p>
+                    </div>
+
+                    <!-- Hangar 1 Details (MRO) -->
+                    <div class="glass-panel p-8 space-y-6 animate-on-scroll delay-2">
+                        <h3 class="section-subtitle text-center">Hangar 1 (MRO)</h3>
+                        <div class="img-placeholder-wrapper">
+                            <img src="https://i.postimg.cc/W44bqHWm/hangar-04.jpg" 
+                                 alt="Hangar 1 MRO Aerial View" 
+                                 class="img-placeholder">
+                        </div>
+                        <div class="data-display text-center">
+                            <h3>Hangar 1 Area</h3>
+                            <p>
+                                <span class="value count-up" data-target="85928">0</span>
+                                <span class="unit">ft²</span>
+                            </p>
+                            <p class="price-sub">(7,983 m²)</p>
+                        </div>
+                        <p class="section-description text-center mx-auto font-semibold text-lg">
+                            Suitable for MRO (Maintenance, Repair, and Overhaul) operations.
+                        </S>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 4: Additional View -->
+            <section class="animate-on-scroll">
+                <h2 class="section-title">Scale & Functionality</h2>
+                <div class="mb-8 img-placeholder-wrapper">
+                    <img src="https://i.postimg.cc/1zYRGr27/Avion-estacionado-2.jpg" 
+                         alt="Additional Hangar Interior View" 
+                         class="img-placeholder shadow-lg">
+                </div>
+                <p class="text-center text-xl text-gray-700 max-w-3xl mx-auto">
+                    A final perspective highlighting the immense scale and operational functionality of Hangar 1.
+                </p>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer id="contact" class="border-t border-gray-200/50 mt-24">
+            <div class="max-w-7xl mx-auto py-16 px-6 text-center">
+                <div class="text-3xl font-bold tracking-tight text-gray-900 mb-4">SAU</div>
+                <p class="text-base text-gray-600">
+                    © 2025 SAU. All rights reserved. <br>
+                    Contact us: <a href="mailto:info@sau.com" class="text-blue-600 hover:underline">info@sau.com</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 3D Hero Scene (Three.js) ---
+            let scene, camera, renderer, hangar, jet;
+            let mouseX = 0, mouseY = 0;
+            // FIX: Changed const to let to allow reassignment on window resize
+            let windowHalfX = window.innerWidth / 2;
+            let windowHalfY = window.innerHeight / 2;
+
+            function initThree() {
+                try {
+                    const canvas = document.getElementById('three-canvas');
+                    if (!canvas) return;
+
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    camera.position.set(0, 15, 35); // Elevated view
+                    camera.lookAt(0, 5, 0);
+
+                    renderer = new THREE.WebGLRenderer({ 
+                        canvas: canvas,
+                        alpha: true, 
+                        antialias: true 
+                    });
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(window.devicePixelRatio);
+
+                    // Lighting
+                    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+                    scene.add(ambientLight);
+                    const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+                    directionalLight.position.set(10, 20, 10);
+                    scene.add(directionalLight);
+
+                    // Materials
+                    const wireMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x0369A1, // Aviation blue
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    
+                    const jetMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xD1D5DB, // Light gray
+                        metalness: 0.5,
+                        roughness: 0.6
+                    });
+
+                    // Create Hangar (as a wireframe box)
+                    const hangarGeom = new THREE.BoxGeometry(60, 25, 40);
+                    hangar = new THREE.Mesh(hangarGeom, wireMaterial);
+                    hangar.position.y = 12.5; // Sit on the ground
+                    scene.add(hangar);
+                    
+                    // Create Ground
+                    const groundGeom = new THREE.PlaneGeometry(100, 100);
+                    const groundMat = new THREE.MeshBasicMaterial({
+                         color: 0x0369A1, 
+                         wireframe: true,
+                         transparent: true,
+                         opacity: 0.3
+                    });
+                    const ground = new THREE.Mesh(groundGeom, groundMat);
+                    ground.rotation.x = -Math.PI / 2;
+                    scene.add(ground);
+
+                    // Create Jet (low-poly placeholder)
+                    jet = new THREE.Group();
+                    const bodyGeom = new THREE.CylinderGeometry(1, 2, 18, 16);
+                    const body = new THREE.Mesh(bodyGeom, jetMaterial);
+                    body.rotation.z = Math.PI / 2;
+                    
+                    const cockpitGeom = new THREE.SphereGeometry(1.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+                    const cockpit = new THREE.Mesh(cockpitGeom, jetMaterial);
+                    cockpit.position.x = 9;
+                    cockpit.rotation.z = -Math.PI / 2;
+
+                    const wingGeom = new THREE.BoxGeometry(15, 0.5, 3);
+                    const wing = new THREE.Mesh(wingGeom, jetMaterial);
+                    wing.position.x = -2;
+
+                    const tailGeom = new THREE.BoxGeometry(4, 3, 0.5);
+                    const tail = new THREE.Mesh(tailGeom, jetMaterial);
+                    tail.position.set(-8.5, 2, 0);
+                    tail.rotation.z = -0.2;
+
+                    jet.add(body);
+                    jet.add(cockpit);
+                    jet.add(wing);
+                    jet.add(tail);
+                    jet.position.y = 5; // Raise jet off the ground
+                    jet.scale.set(0.8, 0.8, 0.8);
+                    scene.add(jet);
+
+                    document.addEventListener('mousemove', onDocumentMouseMove);
+                    window.addEventListener('resize', onWindowResize);
+                    
+                    animate();
+
+                } catch (e) {
+                    console.error("Error initializing 3D scene:", e);
+                    const canvas = document.getElementById('three-canvas');
+                    if (canvas) canvas.style.display = 'none';
+                }
+            }
+            
+            function onDocumentMouseMove(event) {
+                mouseX = (event.clientX - windowHalfX) / 100;
+                mouseY = (event.clientY - windowHalfY) / 100;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Mouse parallax effect
+                camera.position.x += (mouseX - camera.position.x) * 0.01;
+                camera.position.y += (-mouseY - camera.position.y + 15) * 0.01;
+                camera.lookAt(scene.position);
+                
+                // Slow rotation
+                if (hangar) hangar.rotation.y += 0.0005;
+                if (jet) jet.rotation.y += 0.001;
+
+                if (renderer && scene && camera) {
+                    renderer.render(scene, camera);
+                }
+            }
+
+            function onWindowResize() {
+                if (camera && renderer) {
+                    // These variables are now correctly declared with 'let'
+                    // so they can be reassigned here.
+                    windowHalfX = window.innerWidth / 2;
+                    windowHalfY = window.innerHeight / 2;
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            }
+
+            initThree();
+
+
+            // --- Scroll Animations (Intersection Observer) ---
+            const scrollElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const scrollObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        
+                        // Trigger count-up animation
+                        const countUpElements = entry.target.querySelectorAll('.count-up');
+                        countUpElements.forEach(el => {
+                            if (!el.classList.contains('animated')) {
+                                animateCountUp(el);
+                                el.classList.add('animated');
+                            }
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 // 10% visible
+            });
+
+            scrollElements.forEach(el => {
+                scrollObserver.observe(el);
+            });
+
+
+            // --- Count-Up Animation Function ---
+            function animateCountUp(el) {
+                const target = parseFloat(el.getAttribute('data-target'));
+                if (isNaN(target)) return;
+                
+                const duration = 2000; // Animation duration in ms
+                const isDecimal = target % 1 !== 0 || el.innerText.includes('.');
+                const decimalPlaces = isDecimal ? (el.innerText.split('.')[1] || '').length : 0;
+                
+                let startTime = null;
+
+                function step(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    
+                    // Ease-out quad function
+                    const easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                    let currentValue = easeOutProgress * target;
+                    
+                    if (isDecimal) {
+                        el.innerText = currentValue.toFixed(decimalPlaces);
+                    } else {
+                        el.innerText = Math.floor(currentValue).toLocaleString('en-US');
+                    }
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        if (isDecimal) {
+                            el.innerText = target.toFixed(decimalPlaces);
+                        } else {
+                            el.innerText = target.toLocaleString('en-US');
+                        }
+                    }
+                }
+                
+                requestAnimationFrame(step);
+            }
+            
+            // --- Smooth scroll for nav links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // --- Sticky Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
